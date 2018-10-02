@@ -9,13 +9,13 @@ if [[ $? != 0 ]]; then
 fi
 
 # configure git
-read -r HW_EMAIL -p "Enter your heavyWater.com email"
+read -r -p "Enter your heavyWater.com email: " HW_EMAIL
 git config --global user.email "$HW_EMAIL"
 
-read -r HW_NAME -p "Enter your name as you want to display"
+read -r -p "Enter your name as you want to display: " HW_NAME
 git config --global user.name "$HW_NAME"
 
-read -r HW_GITHUB_USER -p "Enter your GitHub UserName"
+read -r -p "Enter your GitHub UserName: " HW_GITHUB_USER
 git config --global github.username "$HW_GITHUB_USER"
 
 if [ ! -f ~/.ssh/id_rsa ]; then
@@ -36,7 +36,7 @@ ssh-add -K ~/.ssh/id_rsa
 KEY_VALUE=$(cat ~/.ssh/id_rsa.pub)
 KEY_NAME=$(uname -n | sed 's/\.local//' | cat "$HW_EMAIL - ")
 
-read -r OTP -p "$HW_GITHUB_USER($HW_EMAIL) mfa: "
+read -r -p "$HW_GITHUB_USER($HW_EMAIL) mfa: " OTP
 
 curl -X POST -H "X-GitHub-OTP: $OTP" https://api.github.com/user/keys -u "$HW_GITHUB_USER" -d \
 "{\"title\": \"$KEY_NAME\", \"key\": \"$KEY_VALUE\"}"
