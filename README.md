@@ -13,6 +13,5 @@ This script is successful if you are able to run the laptop-install repo's scrip
   1. Open spotlight and type `Terminal`
   1. Run the following command
     `bash <(curl -s https://raw.githubusercontent.com/HeavyWater-Solutions/laptop-bootstrap/master/bootstrap.sh)`
-  1. Follow instructions for adding your ssh key to your github account
   1. Run the dev laptop install
     `bash <(curl -s https://raw.githubusercontent.com/HeavyWater-Solutions/hw-cli/process/master/laptop-install.sh)`
