@@ -34,7 +34,8 @@ EOF
 ssh-add -K ~/.ssh/id_rsa
 
 KEY_VALUE=$(cat ~/.ssh/id_rsa.pub)
-KEY_NAME=$(uname -n | sed 's/\.local//' | cat "$HW_EMAIL - ")
+MACHINE_NAME=$(uname -n | sed 's/\.local//')
+KEY_NAME="$HW_EMAIL - $MACHINE_NAME"
 
 read -r -p "$HW_GITHUB_USER($HW_EMAIL) mfa: " OTP
 
