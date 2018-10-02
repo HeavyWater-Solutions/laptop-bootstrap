@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -ex
+set -x
 
 # Boot strap the xcode tools
 xcode-select -p
