@@ -1,16 +1,21 @@
 #!/usr/bin/env bash
 
+set -ex
+
+# Boot strap the xcode tools
+xcode-select -p
+if [[ $? != 0 ]]; then
+  xcode-select --install
+fi
+
 # configure git
-echo "Enter your heavyWater.com email"
-read -r HW_EMAIL
+read -r HW_EMAIL -p "Enter your heavyWater.com email"
 git config --global user.email "$HW_EMAIL"
 
-echo "Enter your name as you want to display"
-read -r HW_NAME
+read -r HW_NAME -p "Enter your name as you want to display"
 git config --global user.name "$HW_NAME"
 
-echo "Enter your GitHub UserName"
-read -r HW_GITHUB_USER
+read -r HW_GITHUB_USER -p "Enter your GitHub UserName"
 git config --global github.username "$HW_GITHUB_USER"
 
 if [ ! -f ~/.ssh/id_rsa ]; then
@@ -28,9 +33,10 @@ EOF
 
 ssh-add -K ~/.ssh/id_rsa
 
-# curl -X POST -H "X-GitHub-OTP: 567453" https://api.github.com/user/keys -u "$HW_GITHUB_USER" -d "{
-#   \"title\": \"$HW_EMAIL\",
-#   \"key\": \"ssh-rsa AAA...\"
-# }"
-echo "Follow the instructions for installing your key:
-https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/"
+KEY_VALUE=$(cat ~/.ssh/id_rsa.pub)
+KEY_NAME=$(uname -n | sed 's/\.local//' | cat "$HW_EMAIL - ")
+
+read -r OTP -p "$HW_GITHUB_USER($HW_EMAIL) mfa: "
+
+curl -X POST -H "X-GitHub-OTP: $OTP" https://api.github.com/user/keys -u "$HW_GITHUB_USER" -d \
+"{\"title\": \"$KEY_NAME\", \"key\": \"$KEY_VALUE\"}"
