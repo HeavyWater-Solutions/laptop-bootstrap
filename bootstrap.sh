@@ -9,7 +9,7 @@ if [[ $? != 0 ]]; then
 fi
 
 # configure git
-read -r -p "Enter your heavyWater.com email: " HW_EMAIL
+read -r -p "Enter your heavywater.com email: " HW_EMAIL
 git config --global user.email "$HW_EMAIL"
 
 read -r -p "Enter your name as you want to display: " HW_NAME
@@ -41,3 +41,10 @@ read -r -p "$HW_GITHUB_USER($HW_EMAIL) mfa: " OTP
 
 curl -X POST -H "X-GitHub-OTP: $OTP" https://api.github.com/user/keys -u "$HW_GITHUB_USER" -d \
 "{\"title\": \"$KEY_NAME\", \"key\": \"$KEY_VALUE\"}"
+
+
+mkdir ~/dev
+cd ~/dev
+git clone git@github.com/HeavyWater-Solutions/hw-cli.git
+
+echo "\n\n\nRun the following command:\n\n\t./hw-cli/process/laptop-install.sh\n"
