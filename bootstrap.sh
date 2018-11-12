@@ -47,4 +47,4 @@ mkdir ~/dev
 cd ~/dev
 git clone ssh://git@github.com/HeavyWater-Solutions/hw-cli.git
 
-printf "\n\n\nRun the following command:\n\n\t./hw-cli/process/laptop-install.sh\n"
+printf "\n\n\nRun the following command:\n\n\t./dev/hw-cli/process/laptop-install.sh\n"
