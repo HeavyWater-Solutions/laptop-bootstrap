@@ -47,4 +47,5 @@ mkdir ~/dev
 cd ~/dev
 git clone ssh://git@github.com/HeavyWater-Solutions/hw-cli.git
 
+cd ~
 ./dev/hw-cli/process/laptop-install.sh
