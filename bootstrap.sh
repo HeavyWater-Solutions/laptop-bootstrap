@@ -19,6 +19,7 @@ read -r -p "Enter your GitHub UserName: " HW_GITHUB_USER
 git config --global github.username "$HW_GITHUB_USER"
 
 if [ ! -f ~/.ssh/id_rsa ]; then
+    echo -e "\nLeave SSH key blank, enter desired SSH password.\n"
     ssh-keygen -q -t rsa -b 4096 -C "GitHub: $HW_GITHUB_USER <$HW_EMAIL>"
 fi
 
@@ -37,6 +38,8 @@ KEY_VALUE=$(cat ~/.ssh/id_rsa.pub)
 MACHINE_NAME=$(uname -n | sed 's/\.local//')
 KEY_NAME="$HW_EMAIL - $MACHINE_NAME"
 
+echo -e "\nWait for fresh MFA code, enter MFA code & GitHub password before it expires.\n"
+
 read -r -p "$HW_GITHUB_USER($HW_EMAIL) mfa: " OTP
 
 curl -X POST -H "X-GitHub-OTP: $OTP" https://api.github.com/user/keys -u "$HW_GITHUB_USER" -d \
@@ -46,5 +49,5 @@ curl -X POST -H "X-GitHub-OTP: $OTP" https://api.github.com/user/keys -u "$HW_GI
 mkdir ~/dev
 cd ~/dev
 git clone ssh://git@github.com/HeavyWater-Solutions/hw-cli.git
-
-printf "\n\n\nRun the following command:\n\n\t./dev/hw-cli/process/laptop-install.sh\n"
+cd ~
+./dev/hw-cli/process/laptop-install.sh
