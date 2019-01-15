@@ -2,6 +2,17 @@
 
 set -x
 
+# Check admin permission
+echo "Checking admin permissions. Enter your user password:"
+sudo echo "Admin permission configured correctly!"
+if [ $? -ne 0 ]; then
+  echo "FAILED on missing admin permissions"
+  exit 1
+
+fi
+
+echo "Continuing.."
+
 # Boot strap the xcode tools
 xcode-select -p
 if [[ $? != 0 ]]; then
