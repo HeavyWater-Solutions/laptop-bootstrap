@@ -20,14 +20,30 @@ if [[ $? != 0 ]]; then
 fi
 
 # configure git
+read -r -p "Enter your GitHub UserName: " HW_GITHUB_USER
+git config --global github.username "$HW_GITHUB_USER"
+
+myvar=$(curl -u $HW_GITHUB_USER https://api.github.com/user | grep message)
+IFS=':' read -r -a array <<< "$myvar"
+mymsg=${array[1]}
+l=${#mymsg}
+
+# RESPONSE_FROM_API/valueOf(mymsg) = `"Must specify two-factor authentication OTP code.",`
+# NOTE: The above response has length of 52 - we are taking a substring(2,49) to match with the desired response
+
+mymsg=$(echo $mymsg | cut -c2-49)   
+if [ "$mymsg" = "Must specify two-factor authentication OTP code." ]; then
+    echo 2FA setup verified, resuming script execution.
+else
+    echo Setup MFA or Check credentials.
+    exit 1
+fi
+
 read -r -p "Enter your heavywater.com email: " HW_EMAIL
 git config --global user.email "$HW_EMAIL"
 
 read -r -p "Enter your name as you want to display: " HW_NAME
 git config --global user.name "$HW_NAME"
-
-read -r -p "Enter your GitHub UserName: " HW_GITHUB_USER
-git config --global github.username "$HW_GITHUB_USER"
 
 if [ ! -f ~/.ssh/id_rsa ]; then
     echo -e "\nLeave SSH key blank, enter desired SSH password.\n"
