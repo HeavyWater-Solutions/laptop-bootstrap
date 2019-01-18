@@ -23,14 +23,12 @@ fi
 read -r -p "Enter your GitHub UserName: " HW_GITHUB_USER
 git config --global github.username "$HW_GITHUB_USER"
 
-resp=$(curl -i -u $HW_GITHUB_USER https://api.github.com/user | grep "X-GitHub-OTP: required")
-if [ "${#resp}" = "0" ]; then        
-  echo Setup MFA or Check credentials
+if curl -i -s -u $HW_GITHUB_USER https://api.github.com/user | grep "X-GitHub-OTP: required" > /dev/null; then
+  echo Passed, resuming script execution.
+else 
+  echo Setup MFA or Check credentials.
   exit 1
-else
-  echo MFA setup verified, resuming script execution
 fi
-
 
 read -r -p "Enter your heavywater.com email: " HW_EMAIL
 git config --global user.email "$HW_EMAIL"
