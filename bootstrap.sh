@@ -20,14 +20,21 @@ if [[ $? != 0 ]]; then
 fi
 
 # configure git
+read -r -p "Enter your GitHub UserName: " HW_GITHUB_USER
+git config --global github.username "$HW_GITHUB_USER"
+
+if curl -i -s -u $HW_GITHUB_USER https://api.github.com/user | grep "X-GitHub-OTP: required" > /dev/null; then
+  echo Passed, resuming script execution.
+else 
+  echo Setup MFA or Check credentials.
+  exit 1
+fi
+
 read -r -p "Enter your heavywater.com email: " HW_EMAIL
 git config --global user.email "$HW_EMAIL"
 
 read -r -p "Enter your name as you want to display: " HW_NAME
 git config --global user.name "$HW_NAME"
-
-read -r -p "Enter your GitHub UserName: " HW_GITHUB_USER
-git config --global github.username "$HW_GITHUB_USER"
 
 if [ ! -f ~/.ssh/id_rsa ]; then
     echo -e "\nLeave SSH key blank, enter desired SSH password.\n"
