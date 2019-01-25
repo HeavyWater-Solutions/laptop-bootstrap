@@ -68,4 +68,4 @@ mkdir ~/dev
 cd ~/dev
 git clone ssh://git@github.com/HeavyWater-Solutions/hw-cli.git
 cd ~
-./dev/hw-cli/process/laptop-install.sh
+./dev/hw-cli/process/laptop-install.sh 2>&1 | tee ~/install-$(date +%Y%m%d-%H%M%S).log
