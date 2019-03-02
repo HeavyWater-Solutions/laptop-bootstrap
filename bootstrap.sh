@@ -1,22 +1,26 @@
 #!/usr/bin/env bash
 
-set -x
+set -e
 
 # Check admin permission
 echo "Checking admin permissions. Enter your user password:"
-sudo echo "Admin permission configured correctly!"
+sudo echo "Admin permission configured"
 if [ $? -ne 0 ]; then
   echo "FAILED on missing admin permissions"
   exit 1
-
 fi
 
-echo "Continuing.."
-
 # Boot strap the xcode tools
-xcode-select -p
+xcode-select -p &> /dev/null
 if [[ $? != 0 ]]; then
   xcode-select --install
+fi
+
+if nc -w 1 -z github.com "22" &> /dev/null; then
+  echo "SSH access to github.com possible"
+else
+  echo "Unable to SSH to github.com check with the network administrator"
+  exit 1
 fi
 
 # configure git
@@ -24,9 +28,9 @@ read -r -p "Enter your GitHub UserName: " HW_GITHUB_USER
 git config --global github.username "$HW_GITHUB_USER"
 
 if curl -i -s -u $HW_GITHUB_USER https://api.github.com/user | grep "X-GitHub-OTP: required" > /dev/null; then
-  echo Passed, resuming script execution.
-else 
-  echo Setup MFA or Check credentials.
+  echo "MFA successful"
+else
+  echo "MFA unsuccessful - check github.com account or your OTP"
   exit 1
 fi
 
