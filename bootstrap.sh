@@ -19,7 +19,7 @@ fi
 if nc -w 1 -z github.com "22" &> /dev/null; then
   echo "SSH access to github.com possible"
 else
-  echo "Unable to SSH to github.com check with the network administrator"
+  echo "Unable to SSH to github.com, if you are on VPN disconnect, otherwise check with the network administrator"
   exit 1
 fi
 
