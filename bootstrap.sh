@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-
 # Check admin permission
 echo "Checking admin permissions. Enter your user password:"
 sudo echo "Admin permission configured"
@@ -16,12 +14,16 @@ if [[ $? != 0 ]]; then
   xcode-select --install
 fi
 
+# SSH connectivity to github.
 if nc -w 1 -z github.com "22" &> /dev/null; then
   echo "SSH access to github.com possible"
 else
   echo "Unable to SSH to github.com, if you are on VPN disconnect, otherwise check with the network administrator"
   exit 1
 fi
+
+# Fail script on status codes other than 0.
+set -e
 
 # configure git
 read -r -p "Enter your GitHub UserName: " HW_GITHUB_USER
