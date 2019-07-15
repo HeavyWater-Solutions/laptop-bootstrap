@@ -36,7 +36,7 @@ else
   exit 1
 fi
 
-read -r -p "Enter your heavywater.com email: " HW_EMAIL
+read -r -p "Enter your heavywater.com email (*Make sure the email is linked with your Github account): " HW_EMAIL
 git config --global user.email "$HW_EMAIL"
 
 read -r -p "Enter your name as you want to display: " HW_NAME
