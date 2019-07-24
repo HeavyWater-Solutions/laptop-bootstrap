@@ -26,21 +26,24 @@ fi
 set -e
 
 # configure git
-read -r -p "Enter your GitHub UserName: " HW_GITHUB_USER
-git config --global github.username "$HW_GITHUB_USER"
+if [ ! -f ~/.gitconfig ]; then
+  read -r -p "Enter your GitHub UserName: " HW_GITHUB_USER
+  git config --global github.username "$HW_GITHUB_USER"
 
-if curl -i -s -u $HW_GITHUB_USER https://api.github.com/user | grep "X-GitHub-OTP: required" > /dev/null; then
-  echo "MFA successful"
-else
-  echo "MFA unsuccessful - check github.com account or your OTP"
-  exit 1
+  if curl -i -s -u $HW_GITHUB_USER https://api.github.com/user | grep "X-GitHub-OTP: required" > /dev/null; then
+    echo "MFA successful"
+  else
+    echo "MFA unsuccessful - check github.com account or your OTP"
+    exit 1
+  fi
+
+  read -r -p "Enter your heavywater.com email (*Make sure the email is linked with your Github account): " HW_EMAIL
+  git config --global user.email "$HW_EMAIL"
+
+  read -r -p "Enter your name as you want to display: " HW_NAME
+  git config --global user.name "$HW_NAME"
+
 fi
-
-read -r -p "Enter your heavywater.com email (*Make sure the email is linked with your Github account): " HW_EMAIL
-git config --global user.email "$HW_EMAIL"
-
-read -r -p "Enter your name as you want to display: " HW_NAME
-git config --global user.name "$HW_NAME"
 
 if [ ! -f ~/.ssh/id_rsa ]; then
     echo -e "\nLeave SSH key blank, enter desired SSH password.\n"
@@ -70,8 +73,10 @@ curl -X POST -H "X-GitHub-OTP: $OTP" https://api.github.com/user/keys -u "$HW_GI
 "{\"title\": \"$KEY_NAME\", \"key\": \"$KEY_VALUE\"}"
 
 
-mkdir ~/dev
+mkdir -p ~/dev
 cd ~/dev
-git clone ssh://git@github.com/HeavyWater-Solutions/hw-cli.git
-cd ~
-./dev/hw-cli/process/laptop-install.sh 2>&1 | tee ~/install-$(date +%Y%m%d-%H%M%S).log
+if [ ! -d ~/dev/hw-cli ]; then
+  git clone ssh://git@github.com/HeavyWater-Solutions/hw-cli.git
+fi
+
+~/dev/hw-cli/process/laptop-install.sh 2>&1 | tee ~/install-$(date +%Y%m%d-%H%M%S).log
