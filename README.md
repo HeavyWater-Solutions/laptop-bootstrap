@@ -1,15 +1,15 @@
-# Goal
+# laptop-bootstrap
 
-This is a public repo that is useful to begin the installation process of new machines.
+This repo contains a bash script to set up development environments for new HeavyWater team members.
 
-This public script is intended to be the minimum needed to get access to the private install scripts.
+This is a public repo intended automate the steps to access to the private install scripts in the [hw-cli](https://github.com/HeavyWater-Solutions/hw-cli) repository.
 
-## Outcome
+## Instructions
 
-This script is successful if you are able to run the laptop-install repo's scripts.
+Run the following in a terminal window:
 
-## Actions
+```bash
+bash <(curl -s https://raw.githubusercontent.com/HeavyWater-Solutions/laptop-bootstrap/master/bootstrap.sh)
+```
 
-  1. Open spotlight and type `Terminal`
-  1. Run the following command
-    `bash <(curl -s https://raw.githubusercontent.com/HeavyWater-Solutions/laptop-bootstrap/master/bootstrap.sh)`
+As the final step of the bootstrap script, the `laptop-install` shell script in the [hw-cli](https://github.com/HeavyWater-Solutions/hw-cli) repository is called to complete installation of required developer tools.
